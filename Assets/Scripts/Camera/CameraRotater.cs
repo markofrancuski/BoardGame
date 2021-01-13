@@ -16,7 +16,6 @@ public class CameraRotater : MonoBehaviour
 
     private void OnEnable()
     {
-        Debug.Log("OnEnable");
         CameraPan.OnPanClickedUp += MouseIsUp;
         CameraPan.OnPanClickedDown += MouseIsDown;
 
@@ -24,7 +23,6 @@ public class CameraRotater : MonoBehaviour
     }
     private void OnDisable()
     {
-        Debug.Log("OnDisable");
         CameraPan.OnPanClickedUp -= MouseIsUp;
         CameraPan.OnPanClickedDown -= MouseIsDown;
     }
@@ -45,9 +43,12 @@ public class CameraRotater : MonoBehaviour
         }
     }
 
+    public void ResetRotation()
+    {
+        transform.rotation = Quaternion.identity;
+    }
     public void PanLeft()
     {
-        Debug.Log("PanLeft");
         Quaternion currentRotation = transform.rotation;
         Vector3 newRotation = new Vector3(0, currentRotation.eulerAngles.y + (_rotateSpeed * Time.deltaTime) , 0);
 
@@ -56,7 +57,6 @@ public class CameraRotater : MonoBehaviour
     }
     public void PanRight()
     {
-        Debug.Log("PanRight");
         Quaternion currentRotation = transform.rotation;
         Vector3 newRotation = new Vector3(0, currentRotation.eulerAngles.y - (_rotateSpeed * Time.deltaTime), 0);
 
