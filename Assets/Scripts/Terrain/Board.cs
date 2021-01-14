@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class Board : MonoBehaviour
 {
-
     public int Size;
+
+    [SerializeField]
+    private GameObject _cameraParent;
 
     [SerializeField]
     private Vector2 _boardCenter;
