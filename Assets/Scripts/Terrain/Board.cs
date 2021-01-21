@@ -22,4 +22,5 @@ public class Board : MonoBehaviour
     {
         _cameraParent.transform.position = _boardCenter;
     }
+
 }

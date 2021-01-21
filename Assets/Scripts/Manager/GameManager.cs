@@ -7,7 +7,7 @@ public class GameManager : MonoBehaviour
 {
     public static UnityAction<GamePhase> OnGamePhaseChanged;
 
-    private GamePhase _phase;
+    [SerializeField] private GamePhase _phase;
     public GamePhase CurrentPhase
     {
         get { return _phase; }
@@ -19,7 +19,7 @@ public class GameManager : MonoBehaviour
     }
     public enum GamePhase
     {
-        SPAWNING,
+        INITIAL_SPAWNING,
     }
 
     public int MaxMana;

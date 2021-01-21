@@ -20,6 +20,15 @@ public class Tile : MonoBehaviour
         _tilePosition = new Vector2(transform.position.x, transform.position.z );
     }
 
+    private void OnMouseDown()
+    {
+        OnTileClicked();
+    }
+
+    protected virtual void OnTileClicked()
+    {
+        Debug.Log($"Clicked on Tile iwht position:{transform.position}");
+    }
 
     public void SetPiece(BoardPiece pieceToSet)
     {
@@ -30,5 +39,4 @@ public class Tile : MonoBehaviour
     {
         _piece = null;
     }
-
 }

@@ -1,7 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using Enums;
 using UnityEngine;
-using Enums;
 
 public abstract class CardBaseScriptable : ScriptableObject
 {
@@ -10,8 +8,11 @@ public abstract class CardBaseScriptable : ScriptableObject
     public string Description;
     public int ManaCost;
 
-    public virtual void ActivateCard()
+    public Sprite Icon;
+
+    public virtual void SpawnCard()
     {
 
     }
+
 }
