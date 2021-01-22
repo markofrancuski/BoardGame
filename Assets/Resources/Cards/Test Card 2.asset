@@ -10,9 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c7f7b622a44e2a8438b17d8e0b79bced, type: 3}
-  m_Name: Pawn Card 3
+  m_Name: Test Card 2
   m_EditorClassIdentifier: 
-  Name: 
+  Name: Test Card 2
   Description: 
   ManaCost: 0
   Icon: {fileID: 0}
+  PawnModel: {fileID: 0}

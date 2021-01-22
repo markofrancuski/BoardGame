@@ -12,6 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 477dd46015ddb594e9b6a5186761051a, type: 3}
   m_Name: Deck
   m_EditorClassIdentifier: 
-  Cards: []
   DeckName: Deck 1
   MaxCardsInDeck: 20
+  MinimumPawnCardsInDeck: 5
+  MinimumTerrainCardsInDeck: 1
+  MinimumSpellCardsInDeck: 0
+  _cardsList:
+  - {fileID: 11400000, guid: 8a26caf07492b6c42a2c444577a7a5ec, type: 2}
+  - {fileID: 11400000, guid: c0e2f8d56cf41324da6bc9bd7917d814, type: 2}
+  - {fileID: 11400000, guid: 44c29da873053254e9440fcc0a061dc3, type: 2}
+  - {fileID: 11400000, guid: 578c80cd13730504ba1f78a94c13840d, type: 2}
+  - {fileID: 11400000, guid: aeeedaa39f3fc224fae591479f7bcfbf, type: 2}
+  - {fileID: 11400000, guid: 87bbb6d4e4dbd954b999905c0a501a7a, type: 2}
