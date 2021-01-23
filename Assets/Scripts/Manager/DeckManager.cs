@@ -6,11 +6,22 @@ using UnityEngine;
 public class DeckManager : MonoBehaviour
 {
 
+    #region Singleton
+    public static DeckManager Instance;
+    #endregion
+
     public int MaxDecks;
+    [SerializeField]
+    private DeckScriptable _choosenDeck;
+    public DeckScriptable ChoosenDeck => _choosenDeck;
+
     public List<DeckScriptable> Decks;
 
+    #region Unity Methods
     public void Awake()
     {
+        Instance = this;
+
         DeckScriptable[] decks = Resources.FindObjectsOfTypeAll<DeckScriptable>();
         if(decks.Length > MaxDecks)
         {
@@ -18,6 +29,7 @@ public class DeckManager : MonoBehaviour
         }
         Decks = decks.ToList();
     }
+    #endregion
 
     public void CreateNewDeck(string deckName)
     {
@@ -32,5 +44,10 @@ public class DeckManager : MonoBehaviour
     public void RemoveDeck(DeckScriptable deckToRemove)
     {
 
+    }
+
+    public void SetChoosenDeck(DeckScriptable choosenDeck)
+    {
+        _choosenDeck = choosenDeck;
     }
 }
