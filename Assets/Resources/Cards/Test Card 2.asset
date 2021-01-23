@@ -15,5 +15,5 @@ MonoBehaviour:
   Name: Test Card 2
   Description: 
   ManaCost: 0
-  Icon: {fileID: 0}
+  Icon: {fileID: -1828946549344447192, guid: cfebf538519b6e340a85bf83f02063d0, type: 3}
   PawnModel: {fileID: 0}

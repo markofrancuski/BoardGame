@@ -4,6 +4,7 @@ using MEC;
 using Random = UnityEngine.Random;
 using System;
 using UnityEngine.Events;
+using Enums;
 
 [CreateAssetMenu(fileName = "Deck", menuName = "Assets/Deck", order = 0)]
 public class DeckScriptable : ScriptableObject
@@ -11,52 +12,31 @@ public class DeckScriptable : ScriptableObject
     [Header("Deck Basic Information")]
     public string DeckName = "Deck 1";
     public int MaxCardsInDeck;
-    public int CurrentCardsInDeck => Cards.Count;
-
-    [Header("Deck Minimum Requirements")]
-    public int MinimumPawnCardsInDeck = 5;
-    public int MinimumTerrainCardsInDeck = 5;
-    public int MinimumSpellCardsInDeck = 5;
+    public int CurrentCardsInDeck => _cards.Count;
 
     [SerializeField]
-    private Queue<CardBaseScriptable> Cards = new Queue<CardBaseScriptable>();
-    [SerializeField]
-    private List<CardBaseScriptable> _cardsList = new List<CardBaseScriptable>();
+    private List<CardBaseScriptable> _cards = new List<CardBaseScriptable>();
 
     public void AddCard(CardBaseScriptable cardToAdd)
     {
-        if (Cards.Count >= MaxCardsInDeck)
+        if (_cards.Count >= MaxCardsInDeck)
         {
             Debug.LogWarning($"Cannot Add Card limit is hit!");
             return;
         }
-        Cards.Enqueue(cardToAdd);
+        _cards.Add(cardToAdd);
     }
     public void RemoveCard(CardBaseScriptable cardToRemove)
     {
-        if (Cards.Count > 0)
+        if (_cards.Count > 0)
         {
-            CardBaseScriptable removedCard = Cards.Dequeue();
+            _cards.Remove(cardToRemove);
             Debug.LogWarning($"Card Removed from the Deck");
         }
         else
         {
             Debug.LogWarning($"Cannot Remove Card from the Deck");
         }
-    }
-    public CardBaseScriptable DrawCard()
-    {
-        CardBaseScriptable removedCard = null;
-        if (Cards.Count > 0)
-        {
-            removedCard = Cards.Dequeue();
-            Debug.LogWarning($"Card Removed from the Deck");
-        }
-        else
-        {
-            Debug.LogWarning($"Cannot Remove Card from the Deck");
-        }
-        return removedCard;
     }
     public void UpdateCardsInDeck(List<CardBaseScriptable> cards)
     {
@@ -65,52 +45,78 @@ public class DeckScriptable : ScriptableObject
             Debug.LogWarning($"Cannot Update Deck{DeckName}, max cards exceeded!");
             return;
         }
-        _cardsList = cards;
+        _cards = cards;
     }
-
-    public void ShuffleDeck(int guarrantedPawn = 1)
+    
+    public List<CardBaseScriptable> GetAllCardsByType(CardType type)
     {
-        Timing.RunCoroutine(_GetRandomFromDeckCoroutine(_cardsList, guarrantedPawn, GetRandomGuarantedPawns), "GuarantedPawnsCoroutine");
-    }
-
-    private void GetRandomGuarantedPawns(List<int> indexes)
-    {
-        List<CardBaseScriptable> guarrantedPawns = new List<CardBaseScriptable>(indexes.Count);
-
-        foreach (int index in indexes)
+        if(_cards.Count <= 0)
         {
-            guarrantedPawns.Add(_cardsList[index]);
+            Debug.LogWarning($"Cannot Get Cards with type:{type}, list is empty");
         }
 
-        //Save list or return it.
-    }
+        List<CardBaseScriptable> cards = new List<CardBaseScriptable>();
 
+        foreach (CardBaseScriptable card in _cards)
+        {
+            if (card.CardType == type) cards.Add(card);
+        }
+
+        return cards;
+    }
+    
+    /// TODO: Rework this so it doesn't shuffle the initial list and therefore impacts the cards in deck
+    public List<CardBaseScriptable> ShuffleDeck()
+    {
+        List<CardBaseScriptable> shuffledCards = _cards;
+
+        if (shuffledCards.Count <= 0)
+        {
+            Debug.LogWarning($"Shuffling Deck didn't failed but the list is empty");
+            return shuffledCards;
+        }
+
+        List<int> shuffledIndexes = new List<int>();
+
+        bool numberOfCardsAreEven = shuffledCards.Count % 2 == 0 ? true : false;
+
+        while (shuffledIndexes.Count != shuffledCards.Count)
+        {
+            int firstIndex = 0;
+            while(shuffledIndexes.Contains(firstIndex))
+            {
+                firstIndex = Random.Range(0, shuffledCards.Count);
+            }
+
+            int secondIndex = 0;
+            while (shuffledIndexes.Contains(secondIndex) && secondIndex != firstIndex)
+            {
+                secondIndex = Random.Range(0, shuffledCards.Count);
+            }
+            
+            // Get cards to be swiped.
+            CardBaseScriptable firstCard = shuffledCards[firstIndex];
+            CardBaseScriptable secondCard = shuffledCards[secondIndex];
+            // Swap two cards.
+            shuffledCards[firstIndex] = secondCard;
+            shuffledCards[secondIndex] = firstCard;
+
+            // Add indexes.
+            shuffledIndexes.Add(firstIndex);
+            shuffledIndexes.Add(secondIndex);
+
+            // Check even number and if its done.
+            if(!numberOfCardsAreEven && shuffledIndexes.Count + 1 == _cards.Count)
+            {
+                break;
+            }
+        }
+
+        return shuffledCards;
+    }
 
     #region COROUTINES
-    private IEnumerator<float> _GetRandomFromDeckCoroutine(List<CardBaseScriptable> cards, int gurantedPawns, UnityAction<List<int>> returnCallback)
-    {
-        int currentPawns = 0;
-        List<int> alreadyTriedCards = new List<int>();
-        List<int> pawnIndexes = new List<int>();
 
-        while (gurantedPawns > currentPawns)
-        {
-            int randomIndex = Random.Range(0, cards.Count);
-
-            while (alreadyTriedCards.Contains(randomIndex))
-                randomIndex = Random.Range(0, cards.Count);
-
-            alreadyTriedCards.Add(randomIndex);
-
-            if ((int)cards[randomIndex].CardType <= 1) //Normal/Champion Card => (0,1);
-            {
-                currentPawns++;
-                pawnIndexes.Add(randomIndex);
-            }
-            yield return Timing.WaitForOneFrame;
-        }
-        returnCallback(pawnIndexes);
-    }
     #endregion COROUTINES
 }
 

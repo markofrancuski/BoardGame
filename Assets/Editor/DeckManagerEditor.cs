@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEngine;
 
 [CustomEditor(typeof(DeckManager))]
@@ -9,18 +7,21 @@ public class DeckManagerEditor : Editor
 
     DeckManager script;
 
-    [SerializeField]
-    private DeckScriptable asd;
     private void Awake()
     {
-        script = DeckManager.Instance;
+        script = target as DeckManager;
     }
 
     public override void OnInspectorGUI()
     {
         if (GUILayout.Button("Set Choosen Deck"))
         {
-            script.SetChoosenDeck(asd);
+            script.SetChoosenDeck();
+        }       
+        
+        if (GUILayout.Button("Shuffle Cards"))
+        {
+            script.ShuffleDeck();
         }
 
         base.OnInspectorGUI();
