@@ -3930,7 +3930,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0.15, y: 1}
-  m_AnchoredPosition: {x: 0, y: 1.449997}
+  m_AnchoredPosition: {x: 0, y: 1.4500122}
   m_SizeDelta: {x: 0.000061035156, y: -2.899994}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1679784756
@@ -4510,7 +4510,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _testChoosenDeck: {fileID: 11400000, guid: adab7d074b008404693dc0cf6e9cb532, type: 2}
-  _choosenDeck: {fileID: 0}
+  _testShuffledCards:
+  - {fileID: 11400000, guid: 6d25c166c89c8ea44bd4c36e4101c9ba, type: 2}
+  - {fileID: 11400000, guid: c09816e0c23c7c140aaed3e2ad9fdb0c, type: 2}
+  - {fileID: 11400000, guid: 2d047f121d0e68042a72735f061ae7c8, type: 2}
+  - {fileID: 11400000, guid: d376e1aacd128224aa66aef6ce0fc09b, type: 2}
+  - {fileID: 11400000, guid: 1c2e3c97754e48141a7ca1d3bc5a9890, type: 2}
+  - {fileID: 11400000, guid: 578c80cd13730504ba1f78a94c13840d, type: 2}
+  - {fileID: 11400000, guid: 9c79f2fd4e0f3b5449eb3169719fb603, type: 2}
+  - {fileID: 11400000, guid: b7edcc856d73f73479e2d6a6aae93f25, type: 2}
+  - {fileID: 11400000, guid: d98939fc5e0a3024ba7df017effb57dc, type: 2}
+  - {fileID: 11400000, guid: 5929bdf15d85c874588e58a11cb02e6a, type: 2}
+  - {fileID: 11400000, guid: 87bbb6d4e4dbd954b999905c0a501a7a, type: 2}
+  - {fileID: 11400000, guid: aeeedaa39f3fc224fae591479f7bcfbf, type: 2}
+  - {fileID: 11400000, guid: a43222589b21d6941a2d13120fe36f7d, type: 2}
+  - {fileID: 11400000, guid: 601a344663e459444aa5bcd98cdc619c, type: 2}
+  - {fileID: 11400000, guid: c397add845592f940a704cb8e80396d2, type: 2}
+  - {fileID: 11400000, guid: ec6c480ca07794a4aaf6abe66144ecd8, type: 2}
+  - {fileID: 11400000, guid: 5c3af103f2d2f85459ca3e8241e69421, type: 2}
+  - {fileID: 11400000, guid: b7cb046deca717444b340210a7117b27, type: 2}
+  - {fileID: 11400000, guid: 5de3432ef67e4c54fa246484722f401f, type: 2}
+  - {fileID: 11400000, guid: 4c02c154932e62446bddfdf07b1b5770, type: 2}
+  _choosenDeck: {fileID: 11400000, guid: adab7d074b008404693dc0cf6e9cb532, type: 2}
   MaxDecks: 1
   Decks:
   - {fileID: 11400000, guid: adab7d074b008404693dc0cf6e9cb532, type: 2}

@@ -5,6 +5,7 @@ using Random = UnityEngine.Random;
 using System;
 using UnityEngine.Events;
 using Enums;
+using System.Linq;
 
 [CreateAssetMenu(fileName = "Deck", menuName = "Assets/Deck", order = 0)]
 public class DeckScriptable : ScriptableObject
@@ -65,59 +66,46 @@ public class DeckScriptable : ScriptableObject
         return cards;
     }
     
-    /// TODO: Rework this so it doesn't shuffle the initial list and therefore impacts the cards in deck
     public List<CardBaseScriptable> ShuffleDeck()
     {
-        List<CardBaseScriptable> shuffledCards = _cards;
-
-        if (shuffledCards.Count <= 0)
+        if (_cards.Count <= 0)
         {
             Debug.LogWarning($"Shuffling Deck didn't failed but the list is empty");
-            return shuffledCards;
+            return null;
         }
 
-        List<int> shuffledIndexes = new List<int>();
+        int maxCards = _cards.Count;
 
-        bool numberOfCardsAreEven = shuffledCards.Count % 2 == 0 ? true : false;
+        CardBaseScriptable[] shuffledCards = new CardBaseScriptable[maxCards];
 
-        while (shuffledIndexes.Count != shuffledCards.Count)
+        for (int i = 0; i < maxCards; i++)
         {
-            int firstIndex = 0;
-            while(shuffledIndexes.Contains(firstIndex))
+            shuffledCards[i] = _cards[i];
+        }
+
+        int iteration = Random.Range(50, 101);
+
+        while (iteration > 0)
+        {
+            int firstIndex = Random.Range(0, maxCards);
+
+            int secondIndex = Random.Range(0, maxCards);
+            while(secondIndex == firstIndex)
             {
-                firstIndex = Random.Range(0, shuffledCards.Count);
+                secondIndex = Random.Range(0, maxCards);
             }
 
-            int secondIndex = 0;
-            while (shuffledIndexes.Contains(secondIndex) && secondIndex != firstIndex)
-            {
-                secondIndex = Random.Range(0, shuffledCards.Count);
-            }
-            
-            // Get cards to be swiped.
             CardBaseScriptable firstCard = shuffledCards[firstIndex];
             CardBaseScriptable secondCard = shuffledCards[secondIndex];
-            // Swap two cards.
+
+            // Swap two cards
             shuffledCards[firstIndex] = secondCard;
             shuffledCards[secondIndex] = firstCard;
 
-            // Add indexes.
-            shuffledIndexes.Add(firstIndex);
-            shuffledIndexes.Add(secondIndex);
-
-            // Check even number and if its done.
-            if(!numberOfCardsAreEven && shuffledIndexes.Count + 1 == _cards.Count)
-            {
-                break;
-            }
+            iteration -= 1;
         }
 
-        return shuffledCards;
+        return shuffledCards.ToList();
     }
 
-    #region COROUTINES
-
-    #endregion COROUTINES
 }
-
-
