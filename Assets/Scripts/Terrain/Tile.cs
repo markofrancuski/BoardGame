@@ -15,28 +15,43 @@ public class Tile : MonoBehaviour
     public bool IsOccupied => _piece != null ? true : false;
     public bool IsSpawningTile = false;
 
+    [SerializeField] private bool _shouldCheckInput = false;
+
     void Start()
     {
         _tilePosition = new Vector2(transform.position.x, transform.position.z );
+        InputManager.OnMouseOverUI += OnInputStateChanged;
+    }
+
+    private void OnDestroy()
+    {
+        InputManager.OnMouseOverUI -= OnInputStateChanged;
     }
 
     private void OnMouseDown()
     {
-        OnTileClicked();
-    }
+        if (!_shouldCheckInput) return;
 
-    protected virtual void OnTileClicked()
-    {
-        Debug.Log($"Clicked on Tile iwht position:{transform.position}");
+        OnTileClicked();
     }
 
     public void SetPiece(BoardPiece pieceToSet)
     {
         _piece = pieceToSet;
     }
-
     public void RemovePiece()
     {
         _piece = null;
     }
+
+    protected virtual void OnTileClicked()
+    {
+        Debug.Log($"Clicked on Tile with position:{transform.position}");
+    }
+
+    private void OnInputStateChanged(bool shouldCheck)
+    {
+        _shouldCheckInput = shouldCheck;
+    }
+
 }

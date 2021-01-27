@@ -475,7 +475,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &8741647479843389152
 RectTransform:
   m_ObjectHideFlags: 0
@@ -483,7 +483,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8741647479843389153}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -568,6 +568,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1df24c26ec16fb44c82c4db80c265b2a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _manaCostText: {fileID: 8741647478464151861}
+  _cardTypeText: {fileID: 8741647480240123673}
+  _cardNameText: {fileID: 8741647478732036128}
+  _cardIconImage: {fileID: 8741647480134079305}
+  _card: {fileID: 0}
 --- !u!1 &8741647480038017206
 GameObject:
   m_ObjectHideFlags: 0

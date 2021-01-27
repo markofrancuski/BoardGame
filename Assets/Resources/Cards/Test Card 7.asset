@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Test Card 3
   Description: 
-  ManaCost: 0
+  ManaCost: 7
   Icon: {fileID: -1828946549344447192, guid: d9786946c4e72434cb174e526fa382a7, type: 3}
   PawnModel: {fileID: 0}

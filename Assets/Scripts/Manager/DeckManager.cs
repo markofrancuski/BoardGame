@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.ComTypes;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -9,7 +10,7 @@ public class DeckManager : MonoBehaviour
 
     #region Singleton
     /// TODO: Comment this in order to be able to test with editor script.
-    //public static DeckManager Instance;
+    public static DeckManager Instance;
 
     #endregion Singleton
 
@@ -31,11 +32,13 @@ public class DeckManager : MonoBehaviour
     [SerializeField] private DeckScriptable _choosenDeck;
     public DeckScriptable ChoosenDeck => _choosenDeck;
 
+    public int MaxDecks;
+    public List<DeckScriptable> Decks;
+    
+    // Gameplay Variables
     [SerializeField]
     private Queue<CardBaseScriptable> Cards = new Queue<CardBaseScriptable>();
 
-    public int MaxDecks;
-    public List<DeckScriptable> Decks;
 
     #endregion Variables 
 
@@ -50,7 +53,7 @@ public class DeckManager : MonoBehaviour
     public void Awake()
     {
         /// TODO: Comment this in order to be able to test with editor script.
-        //Instance = this;
+        Instance = this;
 
         DeckScriptable[] decks = Resources.FindObjectsOfTypeAll<DeckScriptable>();
         if(decks.Length > MaxDecks)
@@ -67,7 +70,6 @@ public class DeckManager : MonoBehaviour
     {
 
     }
-
     public void UpdateDeck(DeckScriptable deckToUpdate)
     {
 
@@ -77,33 +79,61 @@ public class DeckManager : MonoBehaviour
     {
 
     }
+
     #endregion Deck Customization
 
+    public void SetChoosenDeck(DeckScriptable choosenDeck)
+    {
+        if(choosenDeck.CurrentCardsInDeck < DeckScriptable.MaxCardsInDeck)
+        {
+            Debug.LogWarning("Cannot Set Deck need to max out all cards!");
+            return;
+        }
+        _choosenDeck = choosenDeck;
+    }
+    public void ShuffleDeck()
+    {
+        Cards = ConvertToQueue();
+    }
     public List<CardBaseScriptable> DrawFromDeck(int amount = 1)
     {
+        if(Cards.Count <= 0)
+        {
+            Debug.LogError($"Trying to draw Cards, but none left in deck!");
+            return null;
+        }
+
+        if(amount > Cards.Count)
+        {
+            Debug.LogWarning($"Trying to Draw:{amount}, but only have:{Cards.Count}");
+            amount = Cards.Count;
+        }
+
         List<CardBaseScriptable> drawnCards = new List<CardBaseScriptable>();
 
+        for (int i = 0; i < amount; i++)
+        {
+            drawnCards.Add(Cards.Dequeue());
+        }
 
         return drawnCards;
     }
 
-    public void SendToGraveyard( List<CardBaseScriptable> cards)
+    #region Private Methods
+    private Queue<CardBaseScriptable> ConvertToQueue()
     {
-        
+        Queue<CardBaseScriptable> queue = new Queue<CardBaseScriptable>();
+        _testShuffledCards = _choosenDeck.ShuffleDeck();
+        foreach (CardBaseScriptable card in _testShuffledCards)
+        {
+            queue.Enqueue(card);
+        }
+        return queue;
     }
 
+    #endregion Private Methods
 
     #region Test Methods
-
-    public void SetChoosenDeck()
-    {
-        _choosenDeck = _testChoosenDeck;
-    }
-
-    public void ShuffleDeck()
-    {
-        _testShuffledCards = _choosenDeck.ShuffleDeck();
-    }
 
     #endregion Test Methods
 }

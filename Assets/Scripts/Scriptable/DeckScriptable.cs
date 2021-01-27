@@ -12,7 +12,7 @@ public class DeckScriptable : ScriptableObject
 {
     [Header("Deck Basic Information")]
     public string DeckName = "Deck 1";
-    public int MaxCardsInDeck;
+    public static int MaxCardsInDeck = 20;
     public int CurrentCardsInDeck => _cards.Count;
 
     [SerializeField]
@@ -70,7 +70,7 @@ public class DeckScriptable : ScriptableObject
     {
         if (_cards.Count <= 0)
         {
-            Debug.LogWarning($"Shuffling Deck didn't failed but the list is empty");
+            Debug.LogWarning($"Cannot shuffle deck, list is empty");
             return null;
         }
 

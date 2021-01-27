@@ -16,7 +16,7 @@ public class DeckManagerEditor : Editor
     {
         if (GUILayout.Button("Set Choosen Deck"))
         {
-            script.SetChoosenDeck();
+            //script.SetChoosenDeck();
         }       
         
         if (GUILayout.Button("Shuffle Cards"))
