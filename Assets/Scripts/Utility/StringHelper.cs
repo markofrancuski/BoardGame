@@ -2,7 +2,7 @@
 
 public static class StringHelper 
 {
-    public static string GetCardType(CardType type)
+    public static string CardTypeAsString(CardType type)
     {
 
         string typeAsString = "No Type";

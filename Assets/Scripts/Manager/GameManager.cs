@@ -1,5 +1,4 @@
 ﻿using Enums;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -17,6 +16,18 @@ public class GameManager : MonoBehaviour
     public static UnityAction OnCardsSentToGraveyard;
     #endregion Event declaration
 
+
+    public static int MaxMana = 10;
+    private int _currentMana = 10;
+    public int CurrentMana => _currentMana;
+    
+    public const int InitialDrawCardsAmount = 5;
+    public int CurrentCardsInHand = 0;
+    public int NumberOfCardsInGraveyard => CardsInGraveyard.Count;
+
+    public List<CardBaseScriptable> CardsInHand = new List<CardBaseScriptable>();
+    public List<CardBaseScriptable> CardsInGraveyard = new List<CardBaseScriptable>();
+
     [SerializeField] private GamePhase _phase;
     public GamePhase CurrentPhase
     {
@@ -28,18 +39,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public int MaxMana;
-    private int _currentMana;
-    public int CurrentMana => _currentMana;
-
-    public const int InitialDrawCardsAmount = 5;
-    public int CurrentCardsInHand = 0;
-
-    public List<CardBaseScriptable> CardsInHand = new List<CardBaseScriptable>();
-
-    public int NumberOfCardsInGraveyard => CardsInGraveyard.Count;
-    public List<CardBaseScriptable> CardsInGraveyard = new List<CardBaseScriptable>();
-
     #region Unity Methods
     private void Awake()
     {
@@ -50,6 +49,7 @@ public class GameManager : MonoBehaviour
     {
         Invoke("TestDrawCards", 5f);
     }
+
     #endregion Unity Methods
 
     public void AddMana(int amount)
@@ -78,6 +78,12 @@ public class GameManager : MonoBehaviour
         CurrentCardsInHand = 5;
         
         InitializeDrawnCards?.Invoke(CardsInHand);
+        OnCardsSentToGraveyard?.Invoke();
+    }
+
+    public void HandleSpawnedCard(CardBaseScriptable spawnedCard)
+    {
+        CardsInGraveyard.Add(spawnedCard);
         OnCardsSentToGraveyard?.Invoke();
     }
 
