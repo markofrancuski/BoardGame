@@ -30,6 +30,7 @@ public class CardUI : MonoBehaviour, IDraggable
     [SerializeField] private RectTransform _rectTransform;
     [SerializeField] private Transform _handsParent;
     [SerializeField] private Transform _canvasParent;
+    [SerializeField] private CameraController _cameraController;
     #endregion Component References
 
     #region Private Variables
@@ -49,6 +50,8 @@ public class CardUI : MonoBehaviour, IDraggable
 
         if (!_handsParent)
             _handsParent = transform.parent.transform;
+
+        _cameraController = CameraController.Instance;
 
     }
 
@@ -131,18 +134,32 @@ public class CardUI : MonoBehaviour, IDraggable
         Debug.Log("OnEndDrag");
 
         RaycastHit hit;
+        Vector3 originPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        /// TODO: Somehow get the direction of from the CameraController for raycasting
+        Debug.DrawRay(originPosition, _cameraController.DirectionFromCameraToBoard, Color.red, 10);
+        if(Physics.Raycast(originPosition, _cameraController.DirectionFromCameraToBoard, out hit, 50, 1<< 8))
+        {
+            Debug.Log(hit.collider.name);
+        }
+        else
+        {
+            // Cancel => Return card to the hand
+        }
 
     }
 
     public void OnDrag(PointerEventData eventData)
     {
         Debug.Log("OnDrag");
-        _rectTransform.anchoredPosition += eventData.delta;
+        Vector3 newPos = new Vector3(eventData.delta.x, eventData.delta.y, 0);
+        _rectTransform.position += newPos;
     }
 
     public void OnBeginDrag(PointerEventData eventData)
     {
         Debug.Log("OnBeginDrag");
+        transform.localScale = new Vector3(0.5f, 0.5f);
+        OnCardInHandClicked?.Invoke(_card);
     }
 
     public void OnPointerDown(PointerEventData eventData)
@@ -154,18 +171,4 @@ public class CardUI : MonoBehaviour, IDraggable
 
     #endregion Interface Implementation
 
-    /*
-public void OnPointerUp(PointerEventData eventData)
-{
-}
-
-public void OnPointerDown(PointerEventData eventData)
-{
-_isHoldingMouseDown = true;
-OnCardInHandClicked?.Invoke(_card);
-HandleDraggingCardImage(true);
-GameManager.OnCardsSentToGraveyard += SendToGraveyard;
-Tile.BoardPieceSpawned += SendToGraveyard;
-}
-*/
 }

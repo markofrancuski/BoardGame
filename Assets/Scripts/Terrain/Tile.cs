@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
-public class Tile : MonoBehaviour, IDropHandler
+public class Tile : MonoBehaviour, IDropHandler, IEndDragHandler
 {
     #region Event Declaration
 
@@ -105,7 +105,7 @@ public class Tile : MonoBehaviour, IDropHandler
         */
         
         
-        Debug.Log($"Mouse Over Tile with position:{transform.position}");
+       // Debug.Log($"Mouse Over Tile with position:{transform.position}");
     }
     #endregion Unity Methods
 
@@ -167,6 +167,11 @@ public class Tile : MonoBehaviour, IDropHandler
     {
         // Reverse. We want to check input when value (shouldCheck) is false (Pointer is not over the UI).
         _shouldCheckInput = !shouldCheck;
+    }
+
+    public void OnEndDrag(PointerEventData eventData)
+    {
+        Debug.Log("MRS BRE");
     }
     #endregion Private Methods
 }
