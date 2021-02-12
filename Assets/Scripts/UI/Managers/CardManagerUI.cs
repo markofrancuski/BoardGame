@@ -1,4 +1,4 @@
-﻿using Enums;
+﻿using Enums.Card;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -53,7 +53,7 @@ public class CardManagerUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         foreach (CardBaseScriptable card in cards)
         {
             GameObject go = Instantiate(_cardPrefab, _cardSpawnTransform);
-            go.GetComponent<CardUI>().SetCard(card);
+            go.GetComponent<CardUI>().SetCard(card, transform.parent);
         }
     }
 

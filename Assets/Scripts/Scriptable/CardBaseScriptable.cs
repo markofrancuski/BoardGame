@@ -1,4 +1,4 @@
-﻿using Enums;
+﻿using Enums.Card;
 using UnityEngine;
 
 public abstract class CardBaseScriptable : ScriptableObject

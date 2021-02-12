@@ -1,11 +1,8 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
-using MEC;
-using Random = UnityEngine.Random;
-using System;
-using UnityEngine.Events;
-using Enums;
+﻿using Enums.Card;
+using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
+using Random = UnityEngine.Random;
 
 [CreateAssetMenu(fileName = "Deck", menuName = "Assets/Deck", order = 0)]
 public class DeckScriptable : ScriptableObject

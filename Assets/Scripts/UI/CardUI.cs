@@ -1,5 +1,4 @@
-﻿using System.Xml.Serialization;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
@@ -7,8 +6,9 @@ using UnityEngine.UI;
 
 public class CardUI : MonoBehaviour, IDraggable
 {
-
+    #region Event Declaration
     public static UnityAction<CardBaseScriptable> OnCardInHandClicked;
+    #endregion Event Declaration
 
     #region UI References
 
@@ -24,20 +24,33 @@ public class CardUI : MonoBehaviour, IDraggable
 
     #endregion UI References
 
-    [Header("References")]
+    #region Component References
+    [Header("Component References")]
     [SerializeField] private CardBaseScriptable _card;
+    [SerializeField] private RectTransform _rectTransform;
+    [SerializeField] private Transform _handsParent;
+    [SerializeField] private Transform _canvasParent;
+    #endregion Component References
 
-    #region Variables
+    #region Private Variables
+
     [SerializeField] private bool _isHoldingMouseDown;
     private Color _transparentColor = new Color(0, 0, 0, 125);
 
-    #endregion Variables
+    #endregion Private Variables
 
+    #region Unity Methods
     private void Start()
     {
         _images = GetComponentsInChildren<Image>();
-    }
 
+        if (!_rectTransform)
+            _rectTransform = GetComponent<RectTransform>();
+
+        if (!_handsParent)
+            _handsParent = transform.parent.transform;
+
+    }
 
     private void Update()
     {
@@ -55,12 +68,33 @@ public class CardUI : MonoBehaviour, IDraggable
         
     }
 
-    public void SetCard(CardBaseScriptable card)
+    #endregion Unity Methods
+
+    #region Public Methods
+
+    public void SetCard(CardBaseScriptable card, Transform canvasParent)
     {
         _card = card;
         UpdateUI();
         gameObject.SetActive(true);
+        _canvasParent = canvasParent;
     }
+    /// <summary>
+    /// Gets called when spawning card (Monster, Spell, Terrain).
+    /// </summary>
+    public void Action()
+    {
+
+    }
+    public void SendToGraveyard()
+    {
+        Debug.Log($"Destroying card:{_card.Name}");
+        Destroy(gameObject);
+    }
+
+    #endregion Public Methods
+
+    #region Private Methods
     private void UpdateUI()
     {
         _manaCostText.text = _card.ManaCost.ToString();
@@ -74,34 +108,12 @@ public class CardUI : MonoBehaviour, IDraggable
     {
         foreach (Image image in _images)
         {
-            image.color = transparent ? _transparentColor: Color.white;
+            image.color = transparent ? _transparentColor : Color.white;
         }
     }
+    #endregion Private Methods
 
-    /// <summary>
-    /// Gets called when spawning card (Monster, Spell, Terrain).
-    /// </summary>
-    public void Action()
-    {
-
-    }
-
-    public void SendToGraveyard()
-    {
-        Debug.Log($"Destroying card:{_card.Name}");
-        Destroy(gameObject);
-    }
-
-    public void OnDrag()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public void OnDrop()
-    {
-        throw new System.NotImplementedException();
-    }
-
+    #region Interface Implementation
     public void OnCancel()
     {
         Debug.Log("OnCancel");
@@ -114,16 +126,46 @@ public class CardUI : MonoBehaviour, IDraggable
         Tile.BoardPieceSpawned -= SendToGraveyard;
     }
 
-    public void OnPointerUp(PointerEventData eventData)
+    public void OnEndDrag(PointerEventData eventData)
     {
+        Debug.Log("OnEndDrag");
+
+        RaycastHit hit;
+
+    }
+
+    public void OnDrag(PointerEventData eventData)
+    {
+        Debug.Log("OnDrag");
+        _rectTransform.anchoredPosition += eventData.delta;
+    }
+
+    public void OnBeginDrag(PointerEventData eventData)
+    {
+        Debug.Log("OnBeginDrag");
     }
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        _isHoldingMouseDown = true;
-        OnCardInHandClicked?.Invoke(_card);
+        //Create a copy of this card (UI)
+        _rectTransform.SetParent(_canvasParent);
         HandleDraggingCardImage(true);
-        GameManager.OnCardsSentToGraveyard += SendToGraveyard;
-        Tile.BoardPieceSpawned += SendToGraveyard;
     }
+
+    #endregion Interface Implementation
+
+    /*
+public void OnPointerUp(PointerEventData eventData)
+{
+}
+
+public void OnPointerDown(PointerEventData eventData)
+{
+_isHoldingMouseDown = true;
+OnCardInHandClicked?.Invoke(_card);
+HandleDraggingCardImage(true);
+GameManager.OnCardsSentToGraveyard += SendToGraveyard;
+Tile.BoardPieceSpawned += SendToGraveyard;
+}
+*/
 }

@@ -1,4 +1,4 @@
-﻿using Enums;
+﻿using Enums.Card;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Terrain Card", menuName = "Assets/Cards/Terrain Card", order = 0)]

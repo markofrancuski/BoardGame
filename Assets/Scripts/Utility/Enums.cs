@@ -1,16 +1,33 @@
 ﻿namespace Enums
 {
-    public enum CardType
+    namespace Card
     {
-        NORMAL,
-        CHAMPION,
-        TERRAIN,
-        SPELL
+        public enum CardType
+        {
+            NORMAL,
+            CHAMPION,
+            TERRAIN,
+            SPELL
+        }
     }
-    public enum GamePhase
+
+    namespace Game
     {
-        WAITING_FOR_BOTH_PLAYERS,
-        DECK_SHUFFLE,
-        INITIAL_SPAWNING,
+        public enum GamePhase
+        {
+            WAITING_FOR_BOTH_PLAYERS,
+            DECK_SHUFFLE,
+            INITIAL_SPAWNING,
+        }
+    }
+
+    namespace Tile
+    {
+        public enum TileState
+        {
+            NO_INPUT,
+            DRAGGING_CARD,
+            ACTION,
+        }
     }
 }

@@ -1,4 +1,4 @@
-﻿using Enums;
+﻿using Enums.Card;
 
 public static class StringHelper 
 {

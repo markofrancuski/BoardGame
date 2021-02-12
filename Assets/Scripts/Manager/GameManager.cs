@@ -1,4 +1,4 @@
-﻿using Enums;
+﻿using Enums.Game;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -16,13 +16,12 @@ public class GameManager : MonoBehaviour
     public static UnityAction OnCardsSentToGraveyard;
     #endregion Event declaration
 
-
     public static int MaxMana = 10;
     private int _currentMana = 10;
     public int CurrentMana => _currentMana;
     
     public const int InitialDrawCardsAmount = 5;
-    public int CurrentCardsInHand = 0;
+    public int NumberOfCardsInHand = 0;
     public int NumberOfCardsInGraveyard => CardsInGraveyard.Count;
 
     public List<CardBaseScriptable> CardsInHand = new List<CardBaseScriptable>();
@@ -47,10 +46,29 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        Invoke("TestDrawCards", 5f);
+        Invoke("TestDrawCards", 1f);
     }
 
     #endregion Unity Methods
+
+    #region Public Methods
+    public void InitializeStartGame()
+    {
+        AddMana(MaxMana);
+        // Shuffle Deck and prepare it for queue.
+        DeckManager.Instance.ShuffleDeck();
+        // Draw cards from the queue in hand.
+        CardsInHand = DeckManager.Instance.DrawFromDeck(InitialDrawCardsAmount);
+        NumberOfCardsInHand = InitialDrawCardsAmount;
+
+        InitializeDrawnCards?.Invoke(CardsInHand);
+        OnCardsSentToGraveyard?.Invoke();
+    }
+    public void HandleSpawnedCard(CardBaseScriptable spawnedCard)
+    {
+        CardsInGraveyard.Add(spawnedCard);
+        OnCardsSentToGraveyard?.Invoke();
+    }
 
     public void AddMana(int amount)
     {
@@ -67,25 +85,8 @@ public class GameManager : MonoBehaviour
 
         return true;
     }
-    
-    public void InitializeStartGame()
-    {
-        AddMana(MaxMana);
-        // Shuffle Deck and prepare it, in queue.
-        DeckManager.Instance.ShuffleDeck();
-        // Draw cards from the queue in hand.
-        CardsInHand = DeckManager.Instance.DrawFromDeck(InitialDrawCardsAmount);
-        CurrentCardsInHand = 5;
-        
-        InitializeDrawnCards?.Invoke(CardsInHand);
-        OnCardsSentToGraveyard?.Invoke();
-    }
 
-    public void HandleSpawnedCard(CardBaseScriptable spawnedCard)
-    {
-        CardsInGraveyard.Add(spawnedCard);
-        OnCardsSentToGraveyard?.Invoke();
-    }
+    #endregion Public Methods
 
     #region Test Methods
 

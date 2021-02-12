@@ -1,32 +1,63 @@
-﻿using Enums;
+﻿using Enums.Card;
+using Enums.Tile;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 
-public class Tile : MonoBehaviour
+public class Tile : MonoBehaviour, IDropHandler
 {
+    #region Event Declaration
 
     public static UnityAction BoardPieceSpawned;
 
+    #endregion Event Declaration
+
+    #region UI References
+    
     [SerializeField] private Material _tileMaterial;
     [SerializeField] private Material _redMaterial;
     [SerializeField] private Material _greenMaterial;
 
     [SerializeField] private Renderer _renderer;
 
-    private Vector2 _tilePosition;
-    public Vector2 TilePosition => _tilePosition;
+    #endregion UI References
+
+    #region Component References
 
     [SerializeField]
     private BoardPiece _piece;
     public BoardPiece Piece => _piece;
 
-    
-    public bool IsOccupied => _piece != null ? true : false;
-    public bool IsSpawningTile = false;
+    #endregion Component References
 
+    #region Enums
+    [SerializeField] private TileState _tileState;
+    public TileState TileState
+    {
+        get { return _tileState; }
+        protected set { _tileState = value; }
+    }
+    #endregion Enums
+
+    #region Private Fields
+    private Vector2 _tilePosition;
+    #endregion Private Fields
+
+    #region Public Fields
+    public Vector2 TilePosition => _tilePosition;
+    public bool IsOccupied => _piece != null ? true : false;
+    #endregion Public Fields
+
+    #region Private variables
     [SerializeField] private bool _shouldCheckInput = false;
     [SerializeField] private bool _isDraggingCard;
+    #endregion Private variables
 
+    #region Public variables
+    public bool IsSpawningTile = false;
+    #endregion Public variables
+
+    #region Unity Methods
     void Start()
     {
         if (!_renderer)
@@ -39,44 +70,46 @@ public class Tile : MonoBehaviour
         CardManagerUI.OnDraggingCardSet += HandleDragginCard;
 
     }
-
     private void OnDestroy()
     {
         InputManager.OnMouseOverUI -= OnInputStateChanged;
         CardManagerUI.OnDraggingCardSet -= HandleDragginCard;
     }
-
     private void OnMouseDown()
     {
         Debug.Log("OnMouseDown");
 
         if (!_shouldCheckInput) return;
 
-        Debug.Log("OnMouseDown");
         OnTileClicked();
     }
-
-
     private void OnMouseUp()
     {
-        Debug.Log("OnMouseUp");
+        /*Debug.Log("OnMouseUp");
         if (_isDraggingCard)
         {
             Debug.Log("OnMouseUp");
             // Card had been spawned
             HandleDragginCard(null, 0);
             BoardPieceSpawned?.Invoke();
-        }
+        }*/
     }
-
     private void OnMouseOver()
     {
-        if (!_shouldCheckInput) return;
+        /*if (!_shouldCheckInput) return;
 
         if (!_isDraggingCard) return;
+        {
 
+        }
+        */
+        
+        
         Debug.Log($"Mouse Over Tile with position:{transform.position}");
     }
+    #endregion Unity Methods
+
+    #region Public Methods
 
     public void SetPiece(BoardPiece pieceToSet)
     {
@@ -86,12 +119,22 @@ public class Tile : MonoBehaviour
     {
         _piece = null;
     }
+    public void OnDrop(PointerEventData eventData)
+    {
+        Debug.Log("OnDrop");
+        Debug.Log(TilePosition.ToString());
+    }
 
+    #endregion Public Methods
+
+    #region Protected Methods
     protected virtual void OnTileClicked()
     {
         Debug.Log($"Clicked on Tile with position:{transform.position}");
     }
+    #endregion Protected Methods
 
+    #region Private Methods
     private void HandleDragginCard(CardBaseScriptable draggingCard, CardType cardType)
     {
         if (!draggingCard)
@@ -125,5 +168,5 @@ public class Tile : MonoBehaviour
         // Reverse. We want to check input when value (shouldCheck) is false (Pointer is not over the UI).
         _shouldCheckInput = !shouldCheck;
     }
-
+    #endregion Private Methods
 }
