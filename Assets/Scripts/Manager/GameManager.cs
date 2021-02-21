@@ -11,21 +11,15 @@ public class GameManager : MonoBehaviour
 
     #region Event declaration
     public static UnityAction<GamePhase> OnGamePhaseChanged;
-    public static UnityAction<List<CardBaseScriptable>> InitializeDrawnCards;
     public static UnityAction<int> OnManaChanged;
-    public static UnityAction OnCardsSentToGraveyard;
+    public static UnityAction<CardBaseScriptable> OnCardsSentToGraveyard;
+    public static UnityAction OnInitializeGame;
     #endregion Event declaration
 
     public static int MaxMana = 10;
     private int _currentMana = 10;
     public int CurrentMana => _currentMana;
     
-    public const int InitialDrawCardsAmount = 5;
-    public int NumberOfCardsInHand = 0;
-    public int NumberOfCardsInGraveyard => CardsInGraveyard.Count;
-
-    public List<CardBaseScriptable> CardsInHand = new List<CardBaseScriptable>();
-    public List<CardBaseScriptable> CardsInGraveyard = new List<CardBaseScriptable>();
 
     [SerializeField] private GamePhase _phase;
     public GamePhase CurrentPhase
@@ -41,6 +35,7 @@ public class GameManager : MonoBehaviour
     #region Unity Methods
     private void Awake()
     {
+        /// TODO: Make proper singleton pattern.
         Instance = this;
     }
 
@@ -54,20 +49,15 @@ public class GameManager : MonoBehaviour
     #region Public Methods
     public void InitializeStartGame()
     {
+        /// TODO: Rework this initializing game state.
+        /// inCase we disconnected during the gameplay and return to the game, we would need to sync up the data.
         AddMana(MaxMana);
-        // Shuffle Deck and prepare it for queue.
-        DeckManager.Instance.ShuffleDeck();
-        // Draw cards from the queue in hand.
-        CardsInHand = DeckManager.Instance.DrawFromDeck(InitialDrawCardsAmount);
-        NumberOfCardsInHand = InitialDrawCardsAmount;
-
-        InitializeDrawnCards?.Invoke(CardsInHand);
-        OnCardsSentToGraveyard?.Invoke();
+        
+        OnInitializeGame?.Invoke();
     }
     public void HandleSpawnedCard(CardBaseScriptable spawnedCard)
     {
-        CardsInGraveyard.Add(spawnedCard);
-        OnCardsSentToGraveyard?.Invoke();
+        //CardsInGraveyard.Add(spawnedCard);
     }
 
     public void AddMana(int amount)
@@ -84,6 +74,11 @@ public class GameManager : MonoBehaviour
         OnManaChanged?.Invoke(_currentMana);
 
         return true;
+    }
+
+    public void CardsSentToGraveyard(List<CardBaseScriptable> cards)
+    {
+        //CardsInGraveyard.AddRange(cards);
     }
 
     #endregion Public Methods

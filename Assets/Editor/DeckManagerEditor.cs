@@ -18,11 +18,6 @@ public class DeckManagerEditor : Editor
         {
             //script.SetChoosenDeck();
         }       
-        
-        if (GUILayout.Button("Shuffle Cards"))
-        {
-            script.ShuffleDeck();
-        }
 
         base.OnInspectorGUI();
     }

@@ -122,10 +122,12 @@ public class CardUI : MonoBehaviour, IDraggable
         Debug.Log("OnCancel");
         _isHoldingMouseDown = false;
 
+        transform.localScale = new Vector3(1f,1f,1f);
+        transform.SetParent(_handsParent);
+
         OnCardInHandClicked?.Invoke(null);
         HandleDraggingCardImage(false);
 
-        GameManager.OnCardsSentToGraveyard -= SendToGraveyard;
         Tile.BoardPieceSpawned -= SendToGraveyard;
     }
 
@@ -134,30 +136,34 @@ public class CardUI : MonoBehaviour, IDraggable
         Debug.Log("OnEndDrag");
 
         RaycastHit hit;
-        Vector3 originPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        /// TODO: Somehow get the direction of from the CameraController for raycasting
-        Debug.DrawRay(originPosition, _cameraController.DirectionFromCameraToBoard, Color.red, 10);
-        if(Physics.Raycast(originPosition, _cameraController.DirectionFromCameraToBoard, out hit, 50, 1<< 8))
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        
+        Debug.DrawRay(ray.origin, ray.direction * 20, Color.red, 10);
+        if(Physics.Raycast(ray.origin, ray.direction, out hit, 50, 1<< 8))
         {
             Debug.Log(hit.collider.name);
+            Tile tile = hit.collider.gameObject.GetComponent<Tile>();
+            if(!tile.IsOccupied && tile.IsSpawningTile)
+            {
+                tile.Spawn(_card);
+                SendToGraveyard();
+            }
         }
         else
         {
+            OnCancel();
             // Cancel => Return card to the hand
         }
-
     }
 
     public void OnDrag(PointerEventData eventData)
     {
-        Debug.Log("OnDrag");
         Vector3 newPos = new Vector3(eventData.delta.x, eventData.delta.y, 0);
         _rectTransform.position += newPos;
     }
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        Debug.Log("OnBeginDrag");
         transform.localScale = new Vector3(0.5f, 0.5f);
         OnCardInHandClicked?.Invoke(_card);
     }

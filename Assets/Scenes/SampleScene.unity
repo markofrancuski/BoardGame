@@ -402,7 +402,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.1}
   m_AnchorMax: {x: 0.25, y: 0.9}
-  m_AnchoredPosition: {x: -0.045783997, y: 0}
+  m_AnchoredPosition: {x: -0.045776367, y: 0}
   m_SizeDelta: {x: 0.09160614, y: 0.0000038146973}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &172180660
@@ -1581,7 +1581,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   m_LocalRotation: {x: 0.5, y: -0, z: -0, w: 0.8660254}
-  m_LocalPosition: {x: 0, y: 21.09, z: -15}
+  m_LocalPosition: {x: 0, y: 21, z: -15}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1097180043}
@@ -1836,7 +1836,7 @@ MonoBehaviour:
   _maxY: 5
   _minZ: 5
   _maxZ: 5
-  _startPosition: {x: 4.5, y: 21.09, z: -10.5}
+  _startPosition: {x: 4.5, y: 21, z: -10.5}
   _cameraTransform: {fileID: 963194228}
 --- !u!114 &1097180046
 MonoBehaviour:
@@ -1850,6 +1850,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77a9a296f490d2049850eeb36b801a9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _cameraTransform: {fileID: 0}
 --- !u!1 &1234550048
 GameObject:
   m_ObjectHideFlags: 0
@@ -2063,9 +2064,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2711208b147828a49897bc747cddec24, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  NumberOfCardsInHand: 0
-  CardsInHand: []
-  CardsInGraveyard: []
   _phase: 0
 --- !u!1 &1398093570
 GameObject:
@@ -2554,7 +2552,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.25, y: 0.1}
   m_AnchorMax: {x: 0.55, y: 0.9}
-  m_AnchoredPosition: {x: -0.000034332275, y: 0}
+  m_AnchoredPosition: {x: -0.000030517578, y: 0}
   m_SizeDelta: {x: 0.0000076293945, y: 0.0000076293945}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1725623630
@@ -2604,7 +2602,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 54.7
+  m_fontSize: 54.65
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -2879,12 +2877,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4afa6b2dee7baaa4790d3e155f923629, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _testChoosenDeck: {fileID: 11400000, guid: adab7d074b008404693dc0cf6e9cb532, type: 2}
-  _testShuffledCards: []
-  _choosenDeck: {fileID: 11400000, guid: adab7d074b008404693dc0cf6e9cb532, type: 2}
+  _testBattleDeck: {fileID: 11400000, guid: adab7d074b008404693dc0cf6e9cb532, type: 2}
+  _battleDeck: {fileID: 0}
   MaxDecks: 1
   Decks:
   - {fileID: 11400000, guid: adab7d074b008404693dc0cf6e9cb532, type: 2}
+  BattleCardsList: []
+  NumberOfCardsInHand: 0
+  CardsInHand: []
+  CardsInGraveyard: []
   _deckCanvas: {fileID: 1690856450}
 --- !u!1 &1922343687
 GameObject:

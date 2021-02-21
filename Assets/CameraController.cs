@@ -7,7 +7,6 @@ public class CameraController : MonoBehaviour
 
     [SerializeField] private Transform _cameraTransform;
     public Transform CameraTransform => _cameraTransform;
-    public Vector3 DirectionFromCameraToBoard;
 
     private void Awake()
     {
@@ -24,7 +23,7 @@ public class CameraController : MonoBehaviour
             return;
         }
 
-        if(!_cameraTransform)
+        if (!_cameraTransform)
         {
             Transform childTransform = transform.GetChild(0);
             if(!childTransform.gameObject.name.Equals("Main Camera"))
@@ -34,8 +33,14 @@ public class CameraController : MonoBehaviour
             else
             {
                 _cameraTransform = childTransform;
-                DirectionFromCameraToBoard = transform.position - _cameraTransform.position;
             }
         }
+    }
+
+    public Vector3 GetDirectionFromCameraToMouseInput()
+    {
+        Vector3 directionFromCamera = new Vector3();
+
+        return directionFromCamera;
     }
 }

@@ -14,6 +14,7 @@ public class DeckScriptable : ScriptableObject
 
     [SerializeField]
     private List<CardBaseScriptable> _cards = new List<CardBaseScriptable>();
+    public List<CardBaseScriptable> Cards => _cards;
 
     public void AddCard(CardBaseScriptable cardToAdd)
     {
@@ -63,46 +64,4 @@ public class DeckScriptable : ScriptableObject
         return cards;
     }
     
-    public List<CardBaseScriptable> ShuffleDeck()
-    {
-        if (_cards.Count <= 0)
-        {
-            Debug.LogWarning($"Cannot shuffle deck, list is empty");
-            return null;
-        }
-
-        int maxCards = _cards.Count;
-
-        CardBaseScriptable[] shuffledCards = new CardBaseScriptable[maxCards];
-
-        for (int i = 0; i < maxCards; i++)
-        {
-            shuffledCards[i] = _cards[i];
-        }
-
-        int iteration = Random.Range(50, 101);
-
-        while (iteration > 0)
-        {
-            int firstIndex = Random.Range(0, maxCards);
-
-            int secondIndex = Random.Range(0, maxCards);
-            while(secondIndex == firstIndex)
-            {
-                secondIndex = Random.Range(0, maxCards);
-            }
-
-            CardBaseScriptable firstCard = shuffledCards[firstIndex];
-            CardBaseScriptable secondCard = shuffledCards[secondIndex];
-
-            // Swap two cards
-            shuffledCards[firstIndex] = secondCard;
-            shuffledCards[secondIndex] = firstCard;
-
-            iteration -= 1;
-        }
-
-        return shuffledCards.ToList();
-    }
-
 }

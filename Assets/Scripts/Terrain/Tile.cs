@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
-public class Tile : MonoBehaviour, IDropHandler, IEndDragHandler
+public class Tile : MonoBehaviour, IEndDragHandler
 {
     #region Event Declaration
 
@@ -77,7 +77,7 @@ public class Tile : MonoBehaviour, IDropHandler, IEndDragHandler
     }
     private void OnMouseDown()
     {
-        Debug.Log("OnMouseDown");
+        //Debug.Log("OnMouseDown");
 
         if (!_shouldCheckInput) return;
 
@@ -111,6 +111,28 @@ public class Tile : MonoBehaviour, IDropHandler, IEndDragHandler
 
     #region Public Methods
 
+    public void Spawn(CardBaseScriptable card)
+    {
+
+        switch (card.CardType)
+        {
+            case CardType.NORMAL:
+                CardPawnScriptable cardPawn = card as CardPawnScriptable;
+                GameObject pawnObject = Instantiate(cardPawn.PawnModel);
+                _piece = pawnObject.GetComponent<BoardPiece>();
+
+                break;
+            case CardType.CHAMPION:
+                break;
+            case CardType.TERRAIN:
+                break;
+            case CardType.SPELL:
+                break;
+            default:
+                break;
+        }
+    }
+
     public void SetPiece(BoardPiece pieceToSet)
     {
         _piece = pieceToSet;
@@ -118,11 +140,6 @@ public class Tile : MonoBehaviour, IDropHandler, IEndDragHandler
     public void RemovePiece()
     {
         _piece = null;
-    }
-    public void OnDrop(PointerEventData eventData)
-    {
-        Debug.Log("OnDrop");
-        Debug.Log(TilePosition.ToString());
     }
 
     #endregion Public Methods

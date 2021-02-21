@@ -20,23 +20,19 @@ public class CardManagerUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     public CardBaseScriptable DraggingCard => _draggingCard;
 
     #region Unity Methods
-
     private void Awake()
     {
         Instance = this;
     }
     private void Start()
     {
-        GameManager.OnCardsSentToGraveyard += UpdateGraveyardAmount;
-        GameManager.InitializeDrawnCards += InitializeNewCardsInHand;
+        DeckManager.InitializeDrawnCards += InitializeNewCardsInHand;
         CardUI.OnCardInHandClicked += SetDraggingCard;
         Tile.BoardPieceSpawned += DragginCardSpawned;
     }
-
     private void OnDestroy()
     {
-        GameManager.OnCardsSentToGraveyard -= UpdateGraveyardAmount;
-        GameManager.InitializeDrawnCards -= InitializeNewCardsInHand;
+        DeckManager.InitializeDrawnCards -= InitializeNewCardsInHand;
         CardUI.OnCardInHandClicked -= SetDraggingCard;
         Tile.BoardPieceSpawned -= DragginCardSpawned;
     }
@@ -59,7 +55,7 @@ public class CardManagerUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     private void UpdateGraveyardAmount()
     {
-        _graveyardAmountText.text = GameManager.Instance.NumberOfCardsInGraveyard.ToString();
+        _graveyardAmountText.text = DeckManager.Instance.NumberOfCardsInGraveyard.ToString();
     }
 
     public void SetDraggingCard(CardBaseScriptable draggingCard)

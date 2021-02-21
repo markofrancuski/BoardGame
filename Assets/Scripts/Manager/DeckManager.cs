@@ -14,29 +14,38 @@ public class DeckManager : MonoBehaviour
 
     #region Events
     public static UnityAction OnCardsInDeckCountChanged;
+    public static UnityAction<List<CardBaseScriptable>> InitializeDrawnCards;
+
     #endregion Events
 
     #region Test Variables for Editor Testing
 
     [Header("Test Variables")]
-    [SerializeField] private DeckScriptable _testChoosenDeck;
-
-    [SerializeField] private List<CardBaseScriptable> _testShuffledCards;
+    [SerializeField] private DeckScriptable _testBattleDeck;
 
     #endregion Test Variables for Editor Testing
 
+    #region Constants
+    public const int InitialDrawCardsAmount = 5;
+    #endregion
+
     #region Variables 
     [Header("Variables")]
-    [SerializeField] private DeckScriptable _choosenDeck;
-    public DeckScriptable ChoosenDeck => _choosenDeck;
+    [SerializeField] private DeckScriptable _battleDeck;
+    public DeckScriptable BattleDeck => _battleDeck;
 
     public int MaxDecks;
     public List<DeckScriptable> Decks;
-    
-    // Gameplay Variables
-    [SerializeField]
-    private Queue<CardBaseScriptable> Cards = new Queue<CardBaseScriptable>();
 
+    private Queue<CardBaseScriptable> BattleCards = new Queue<CardBaseScriptable>();
+    [Header("Gameplay Variables")]
+    [SerializeField] private List<CardBaseScriptable> BattleCardsList = new List<CardBaseScriptable>();
+
+    public int NumberOfCardsInHand => CardsInHand.Count;
+    public int NumberOfCardsInGraveyard => CardsInGraveyard.Count;
+
+    public List<CardBaseScriptable> CardsInHand = new List<CardBaseScriptable>();
+    public List<CardBaseScriptable> CardsInGraveyard = new List<CardBaseScriptable>();
 
     #endregion Variables 
 
@@ -50,6 +59,8 @@ public class DeckManager : MonoBehaviour
 
     public void Awake()
     {
+        GameManager.OnInitializeGame += InitializeGame;
+        
         /// TODO: Comment this in order to be able to test with editor script.
         Instance = this;
 
@@ -59,6 +70,11 @@ public class DeckManager : MonoBehaviour
             Debug.LogError($"You have exceeded the number of max decks you can have!");
         }
         Decks = decks.ToList();
+    }
+
+    private void OnDestroy()
+    {
+        GameManager.OnInitializeGame -= InitializeGame;
     }
 
     #endregion Unity Methods
@@ -80,58 +96,122 @@ public class DeckManager : MonoBehaviour
 
     #endregion Deck Customization
 
-    public void SetChoosenDeck(DeckScriptable choosenDeck)
+    #region Public Methods
+
+    public static Queue<T> ListToQueue<T>(List<T> entityList) where T : class
     {
-        if(choosenDeck.CurrentCardsInDeck < DeckScriptable.MaxCardsInDeck)
+        Queue<T> queue = new Queue<T>();
+        foreach (T entity in entityList)
+        {
+            queue.Enqueue(entity);
+        }
+        return queue;
+    }
+
+    public void SetBattleDeck(DeckScriptable deck)
+    {
+        if(deck.CurrentCardsInDeck < DeckScriptable.MaxCardsInDeck)
         {
             Debug.LogWarning("Cannot Set Deck need to max out all cards!");
             return;
         }
-        _choosenDeck = choosenDeck;
+        _battleDeck = deck;
     }
-    public void ShuffleDeck()
+
+    public void SetBattleCards(List<CardBaseScriptable> cards)
     {
-        Cards = ConvertToQueue();
+        BattleCardsList = cards;
+    }
+
+    public void ShuffleCards()
+    {
+        BattleCardsList = ShuffleCards(BattleCardsList);
+        BattleCards = ListToQueue(BattleCardsList);
     }
     public List<CardBaseScriptable> DrawFromDeck(int amount = 1)
     {
-        if(Cards.Count <= 0)
+        if(BattleCards.Count <= 0)
         {
             Debug.LogError($"Trying to draw Cards, but none left in deck!");
             return null;
         }
 
-        if(amount > Cards.Count)
+        if(amount > BattleCards.Count)
         {
-            Debug.LogWarning($"Trying to Draw:{amount}, but only have:{Cards.Count}");
-            amount = Cards.Count;
+            Debug.LogWarning($"Trying to Draw:{amount}, but only have:{BattleCards.Count}");
+            amount = BattleCards.Count;
         }
 
         List<CardBaseScriptable> drawnCards = new List<CardBaseScriptable>();
 
         for (int i = 0; i < amount; i++)
         {
-            drawnCards.Add(Cards.Dequeue());
+            drawnCards.Add(BattleCards.Dequeue());
+            /// TODO: Testing Remove After
+            BattleCardsList.RemoveAt(0);
         }
 
         return drawnCards;
     }
 
+    #endregion Public Methods
+
     #region Private Methods
-    private Queue<CardBaseScriptable> ConvertToQueue()
+
+    private void InitializeGame()
     {
-        Queue<CardBaseScriptable> queue = new Queue<CardBaseScriptable>();
-        _testShuffledCards = _choosenDeck.ShuffleDeck();
-        foreach (CardBaseScriptable card in _testShuffledCards)
+        SetBattleDeck(_testBattleDeck);
+        SetBattleCards(_testBattleDeck.Cards);
+
+        ShuffleCards();
+        // Draw cards from the queue in hand.
+        CardsInHand = DrawFromDeck(InitialDrawCardsAmount);
+        
+        InitializeDrawnCards?.Invoke(CardsInHand);
+    }
+
+    private List<CardBaseScriptable> ShuffleCards(List<CardBaseScriptable> cards)
+    {
+        if (cards.Count <= 2)
         {
-            queue.Enqueue(card);
+            Debug.LogWarning($"Cannot shuffle deck, count is <= 2");
+            return null;
         }
-        return queue;
+
+        int maxCards = cards.Count;
+
+        CardBaseScriptable[] shuffledCards = new CardBaseScriptable[maxCards];
+
+        for (int i = 0; i < maxCards; i++)
+        {
+            shuffledCards[i] = cards[i];
+        }
+
+        int iteration = Random.Range(50, 101);
+
+        while (iteration > 0)
+        {
+            int firstIndex = Random.Range(0, maxCards);
+
+            int secondIndex = Random.Range(0, maxCards);
+            while (secondIndex == firstIndex)
+            {
+                secondIndex = Random.Range(0, maxCards);
+            }
+
+            CardBaseScriptable firstCard = shuffledCards[firstIndex];
+            CardBaseScriptable secondCard = shuffledCards[secondIndex];
+
+            // Swap two cards
+            shuffledCards[firstIndex] = secondCard;
+            shuffledCards[secondIndex] = firstCard;
+
+            iteration -= 1;
+        }
+
+        return shuffledCards.ToList();
     }
 
     #endregion Private Methods
 
-    #region Test Methods
-
-    #endregion Test Methods
 }
