@@ -16,4 +16,4 @@ MonoBehaviour:
   Description: 
   ManaCost: 5
   Icon: {fileID: 1442240968710923744, guid: 6847890d0055e6341b767842d9104f56, type: 3}
-  PawnModel: {fileID: 0}
+  PawnModel: {fileID: 5011490491537508187, guid: c5f86b320e2670c48be7f01376e4c910, type: 3}

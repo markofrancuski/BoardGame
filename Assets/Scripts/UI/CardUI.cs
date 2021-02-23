@@ -82,13 +82,7 @@ public class CardUI : MonoBehaviour, IDraggable
         gameObject.SetActive(true);
         _canvasParent = canvasParent;
     }
-    /// <summary>
-    /// Gets called when spawning card (Monster, Spell, Terrain).
-    /// </summary>
-    public void Action()
-    {
 
-    }
     public void SendToGraveyard()
     {
         Debug.Log($"Destroying card:{_card.Name}");
@@ -145,8 +139,15 @@ public class CardUI : MonoBehaviour, IDraggable
             Tile tile = hit.collider.gameObject.GetComponent<Tile>();
             if(!tile.IsOccupied && tile.IsSpawningTile)
             {
-                tile.Spawn(_card);
-                SendToGraveyard();
+                // Disable tile materials
+                // Remove mana
+                if(GameManager.Instance.CurrentMana >= _card.ManaCost)
+                {
+                    tile.Spawn(_card);
+                    SendToGraveyard();
+                    CardManagerUI.Instance.SetDraggingCard(null);
+                }
+
             }
         }
         else

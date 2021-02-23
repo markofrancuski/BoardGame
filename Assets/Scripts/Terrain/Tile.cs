@@ -114,6 +114,8 @@ public class Tile : MonoBehaviour, IEndDragHandler
     public void Spawn(CardBaseScriptable card)
     {
 
+        GameManager.Instance.RemoveMana(card.ManaCost);
+
         switch (card.CardType)
         {
             case CardType.NORMAL:

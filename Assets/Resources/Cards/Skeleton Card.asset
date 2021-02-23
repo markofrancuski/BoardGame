@@ -16,3 +16,4 @@ MonoBehaviour:
   Description: This is a skeleton
   ManaCost: 1
   Icon: {fileID: 0}
+  PawnModel: {fileID: 5011490491537508187, guid: c5f86b320e2670c48be7f01376e4c910, type: 3}
