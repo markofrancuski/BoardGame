@@ -143,6 +143,7 @@ public class CardUI : MonoBehaviour, IDraggable
             if (_gameManager.CurrentMana < _card.ManaCost)
             {
                 Debug.Log($"Cannot Activate Card:({_card.Name}) not enough mana ({_card.ManaCost}), have ({_gameManager.CurrentMana })!");
+                OnCancel();
                 return;
             }
             
@@ -150,13 +151,11 @@ public class CardUI : MonoBehaviour, IDraggable
             Tile tile = hit.collider.gameObject.GetComponent<Tile>();
             if(!tile.IsOccupied && tile.IsSpawningTile)
             {
-                // Disable tile materials
-                // Remove mana
                 /// TODO: Subscibe all of there methods to the OnCardActivation event.
                 tile.Spawn(_card);
                 OnCardActivation?.Invoke(_card);
                 CardManagerUI.Instance.SetDraggingCard(null);
-                _gameManager.Send
+                Destroy(gameObject);
             }
         }
         else
@@ -174,6 +173,7 @@ public class CardUI : MonoBehaviour, IDraggable
 
     public void OnBeginDrag(PointerEventData eventData)
     {
+        _isHoldingMouseDown = true;
         transform.localScale = new Vector3(0.5f, 0.5f);
         OnCardInHandClicked?.Invoke(_card);
     }

@@ -455,7 +455,7 @@ GameObject:
   - component: {fileID: 269228463}
   - component: {fileID: 269228462}
   m_Layer: 5
-  m_Name: TextCardsLeft
+  m_Name: TextCardsRemainingAmount
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2065,6 +2065,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _phase: 0
+  _deckManager: {fileID: 0}
 --- !u!1 &1398093570
 GameObject:
   m_ObjectHideFlags: 0
@@ -2113,7 +2114,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1427878279}
   m_Layer: 5
-  m_Name: ParentCardsLeft
+  m_Name: ParentCardsRemaining
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2392,7 +2393,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1638502640}
   m_Layer: 5
-  m_Name: ParentCardsInDeck
+  m_Name: ParentCardsInDeckRemaining
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2602,7 +2603,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 54.65
+  m_fontSize: 54.7
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -2664,7 +2665,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 486bea16be738db4480faefaf8577aa8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _manaLeftText: {fileID: 0}
+  _manaLeftText: {fileID: 1725623630}
 --- !u!1 &1734899066
 GameObject:
   m_ObjectHideFlags: 0
@@ -2883,10 +2884,11 @@ MonoBehaviour:
   Decks:
   - {fileID: 11400000, guid: adab7d074b008404693dc0cf6e9cb532, type: 2}
   BattleCardsList: []
-  NumberOfCardsInHand: 0
   CardsInHand: []
   CardsInGraveyard: []
   _deckCanvas: {fileID: 1690856450}
+  _cardsInGraveyardAmountText: {fileID: 546612601}
+  _cardsInDeckRemainingText: {fileID: 269228462}
 --- !u!1 &1922343687
 GameObject:
   m_ObjectHideFlags: 0
@@ -3085,7 +3087,7 @@ PrefabInstance:
       objectReference: {fileID: 1097180042}
     - target: {fileID: 7108167825218245875, guid: 4c1d55f610d60ba49a0e6d748f150a80, type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7108167825218245875, guid: 4c1d55f610d60ba49a0e6d748f150a80, type: 3}
       propertyPath: m_LocalPosition.x

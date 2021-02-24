@@ -1,5 +1,6 @@
 ﻿using Enums.Game;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -19,7 +20,6 @@ public class GameManager : MonoBehaviour
     public static int MaxMana = 10;
     private int _currentMana = 10;
     public int CurrentMana => _currentMana;
-    
 
     [SerializeField] private GamePhase _phase;
     public GamePhase CurrentPhase
@@ -32,11 +32,42 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    #region Component References
+    [SerializeField] private DeckManager _deckManager;
+    private DeckManager DeckManager
+    {
+        get 
+        { 
+            if(_deckManager == null)
+            {
+                _deckManager = DeckManager.Instance;
+            }
+            return _deckManager; 
+        }
+        set { _deckManager = value; }
+    }
+    #endregion Component References
+
     #region Unity Methods
     private void Awake()
     {
-        /// TODO: Make proper singleton pattern.
-        Instance = this;
+        if(Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Debug.Log($"Instance of a {this.GetType()} Already exists. Destroying");
+            Destroy(this);
+        }
+
+        DeckManager = DeckManager.Instance;
+        if(DeckManager == null)
+        {
+            Debug.LogError($"Tried to get DeckManager Instance, but its NULL, will cause issues!");
+        }
+
     }
 
     private void Start()
@@ -57,7 +88,8 @@ public class GameManager : MonoBehaviour
     }
     public void HandleSpawnedCard(CardBaseScriptable spawnedCard)
     {
-        //CardsInGraveyard.Add(spawnedCard);
+        List<CardBaseScriptable> cardsToBeSentToGraveyard = new List<CardBaseScriptable>(1) { spawnedCard };
+        DeckManager.SendToGraveyardFromHand(cardsToBeSentToGraveyard);
     }
 
     public void AddMana(int amount)
@@ -78,7 +110,7 @@ public class GameManager : MonoBehaviour
 
     public void CardsSentToGraveyard(List<CardBaseScriptable> cards)
     {
-        //CardsInGraveyard.AddRange(cards);
+    
     }
 
     #endregion Public Methods

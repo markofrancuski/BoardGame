@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
+[RequireComponent(typeof(MeshRenderer))]
 public class Tile : MonoBehaviour, IEndDragHandler
 {
     #region Event Declaration
@@ -113,19 +114,15 @@ public class Tile : MonoBehaviour, IEndDragHandler
 
     public void Spawn(CardBaseScriptable card)
     {
-
-        GameManager.Instance.RemoveMana(card.ManaCost);
+        if((int)card.CardType <= 1)
+        {
+            CardPawnScriptable cardPawn = card as CardPawnScriptable;
+            GameObject pawnObject = Instantiate(cardPawn.PawnModel, gameObject.transform.localPosition, Quaternion.identity);
+            _piece = pawnObject.GetComponent<BoardPiece>();
+        }
 
         switch (card.CardType)
         {
-            case CardType.NORMAL:
-                CardPawnScriptable cardPawn = card as CardPawnScriptable;
-                GameObject pawnObject = Instantiate(cardPawn.PawnModel);
-                _piece = pawnObject.GetComponent<BoardPiece>();
-
-                break;
-            case CardType.CHAMPION:
-                break;
             case CardType.TERRAIN:
                 break;
             case CardType.SPELL:
@@ -133,6 +130,9 @@ public class Tile : MonoBehaviour, IEndDragHandler
             default:
                 break;
         }
+
+        GameManager.Instance.RemoveMana(card.ManaCost);
+        BoardPieceSpawned?.Invoke();
     }
 
     public void SetPiece(BoardPiece pieceToSet)
@@ -150,6 +150,12 @@ public class Tile : MonoBehaviour, IEndDragHandler
     protected virtual void OnTileClicked()
     {
         Debug.Log($"Clicked on Tile with position:{transform.position}");
+
+        /// TODO: Perform checks if we are draging card 
+        /// if not 
+        /// or if its empty 
+        /// or if we can to move some pawn onto this tile 
+        /// or we want to select board piece
     }
     #endregion Protected Methods
 
@@ -190,7 +196,6 @@ public class Tile : MonoBehaviour, IEndDragHandler
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        Debug.Log("MRS BRE");
     }
     #endregion Private Methods
 }

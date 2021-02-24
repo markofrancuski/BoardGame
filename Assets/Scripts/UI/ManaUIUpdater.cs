@@ -12,7 +12,10 @@ public class ManaUIUpdater : MonoBehaviour
         {
             _manaLeftText = GetComponent<TextMeshProUGUI>();
         }
-        UpdateMana(GameManager.MaxMana);
+    }
+    private void OnEnable()
+    {
+        GameManager.OnManaChanged += UpdateMana;
     }
 
     private void OnDisable()
@@ -20,14 +23,10 @@ public class ManaUIUpdater : MonoBehaviour
         GameManager.OnManaChanged -= UpdateMana;
     }
 
-    private void OnEnable()
-    {
-        GameManager.OnManaChanged += UpdateMana;
-    }
-
     private void UpdateMana(int amount)
     {
         _manaLeftText.text = amount.ToString();
+        Debug.Log($"Updating Mana Text To: {amount}");
     }
 
 }

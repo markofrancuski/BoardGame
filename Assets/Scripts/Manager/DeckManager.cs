@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -39,31 +41,41 @@ public class DeckManager : MonoBehaviour
 
     private Queue<CardBaseScriptable> BattleCards = new Queue<CardBaseScriptable>();
     [Header("Gameplay Variables")]
+    /// TODO: Remove After this is only for testing purpouse to see the order of cards inside the queue.
     [SerializeField] private List<CardBaseScriptable> BattleCardsList = new List<CardBaseScriptable>();
 
     public int NumberOfCardsInHand => CardsInHand.Count;
     public int NumberOfCardsInGraveyard => CardsInGraveyard.Count;
+    public int NumberOfCardsRemainingInDeck => BattleCards.Count;
 
     public List<CardBaseScriptable> CardsInHand = new List<CardBaseScriptable>();
     public List<CardBaseScriptable> CardsInGraveyard = new List<CardBaseScriptable>();
 
     #endregion Variables 
 
-    #region Variable References
-    [Header("References")]
-
+    #region UI References
+    [Header("UI References")]
     [SerializeField] private GameObject _deckCanvas;
-    #endregion Variable References
+    [SerializeField] private TextMeshProUGUI _cardsInGraveyardAmountText;
+    [SerializeField] private TextMeshProUGUI _cardsInDeckRemainingText;
+    #endregion
 
     #region Unity Methods
 
     public void Awake()
     {
-        GameManager.OnInitializeGame += InitializeGame;
-        
-        /// TODO: Comment this in order to be able to test with editor script.
-        Instance = this;
+        if(Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Debug.Log($"Instance of a {this.GetType()} Already exists. Destroying");
+            Destroy(this);
+        }
 
+        GameManager.OnInitializeGame += InitializeGame;
         DeckScriptable[] decks = Resources.FindObjectsOfTypeAll<DeckScriptable>();
         if(decks.Length > MaxDecks)
         {
@@ -158,12 +170,20 @@ public class DeckManager : MonoBehaviour
             BattleCardsList.RemoveAt(0);
         }
 
+        UpdateCardsInDeckText(NumberOfCardsRemainingInDeck);
+
         return drawnCards;
     }
 
     public void SendToGraveyardFromHand(List<CardBaseScriptable> cards)
     {
-        /// TODO:
+        foreach (CardBaseScriptable card in cards)
+        {
+            CardsInHand.Remove(card);
+            CardsInGraveyard.Add(card);
+        }
+
+        UpdateGraveyardText(NumberOfCardsInGraveyard);
     }
     #endregion Public Methods
 
@@ -179,6 +199,27 @@ public class DeckManager : MonoBehaviour
         CardsInHand = DrawFromDeck(InitialDrawCardsAmount);
         
         InitializeDrawnCards?.Invoke(CardsInHand);
+        UpdateGraveyardText(NumberOfCardsInGraveyard);
+        UpdateCardsInDeckText(NumberOfCardsRemainingInDeck);
+    }
+
+    private void UpdateGraveyardText(int amount)
+    {
+        if(!_cardsInGraveyardAmountText)
+        {
+            Debug.Log("Cannot Update Cards in Graveyard Text Value, Text Component is NULL");
+            return;
+        }
+        _cardsInGraveyardAmountText.text = amount.ToString();
+    }    
+    private void UpdateCardsInDeckText(int amount)
+    {
+        if(!_cardsInDeckRemainingText)
+        {
+            Debug.Log("Cannot Update Cards Remaining in Deck Text Value, Text Component is NULL");
+            return;
+        }
+        _cardsInDeckRemainingText.text = amount.ToString();
     }
 
     private List<CardBaseScriptable> ShuffleCards(List<CardBaseScriptable> cards)
