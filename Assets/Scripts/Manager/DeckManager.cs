@@ -108,6 +108,10 @@ public class DeckManager : MonoBehaviour
         return queue;
     }
 
+    /// <summary>
+    /// Sets the Deck that will be used in game.
+    /// </summary>
+    /// <param name="deck"></param>
     public void SetBattleDeck(DeckScriptable deck)
     {
         if(deck.CurrentCardsInDeck < DeckScriptable.MaxCardsInDeck)
@@ -117,7 +121,10 @@ public class DeckManager : MonoBehaviour
         }
         _battleDeck = deck;
     }
-
+    /// <summary>
+    /// Sets the cards that will be used in game.
+    /// </summary>
+    /// <param name="cards"></param>
     public void SetBattleCards(List<CardBaseScriptable> cards)
     {
         BattleCardsList = cards;
@@ -154,6 +161,10 @@ public class DeckManager : MonoBehaviour
         return drawnCards;
     }
 
+    public void SendToGraveyardFromHand(List<CardBaseScriptable> cards)
+    {
+        /// TODO:
+    }
     #endregion Public Methods
 
     #region Private Methods

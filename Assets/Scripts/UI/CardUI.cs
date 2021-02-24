@@ -1,4 +1,6 @@
-﻿using TMPro;
+﻿using NUnit.Framework;
+using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
@@ -8,6 +10,7 @@ public class CardUI : MonoBehaviour, IDraggable
 {
     #region Event Declaration
     public static UnityAction<CardBaseScriptable> OnCardInHandClicked;
+    public static UnityAction<CardBaseScriptable> OnCardActivation;
     #endregion Event Declaration
 
     #region UI References
@@ -31,6 +34,7 @@ public class CardUI : MonoBehaviour, IDraggable
     [SerializeField] private Transform _handsParent;
     [SerializeField] private Transform _canvasParent;
     [SerializeField] private CameraController _cameraController;
+    [SerializeField] private GameManager _gameManager;
     #endregion Component References
 
     #region Private Variables
@@ -44,6 +48,7 @@ public class CardUI : MonoBehaviour, IDraggable
     private void Start()
     {
         _images = GetComponentsInChildren<Image>();
+        _gameManager = GameManager.Instance;
 
         if (!_rectTransform)
             _rectTransform = GetComponent<RectTransform>();
@@ -135,19 +140,23 @@ public class CardUI : MonoBehaviour, IDraggable
         Debug.DrawRay(ray.origin, ray.direction * 20, Color.red, 10);
         if(Physics.Raycast(ray.origin, ray.direction, out hit, 50, 1<< 8))
         {
+            if (_gameManager.CurrentMana < _card.ManaCost)
+            {
+                Debug.Log($"Cannot Activate Card:({_card.Name}) not enough mana ({_card.ManaCost}), have ({_gameManager.CurrentMana })!");
+                return;
+            }
+            
             Debug.Log(hit.collider.name);
             Tile tile = hit.collider.gameObject.GetComponent<Tile>();
             if(!tile.IsOccupied && tile.IsSpawningTile)
             {
                 // Disable tile materials
                 // Remove mana
-                if(GameManager.Instance.CurrentMana >= _card.ManaCost)
-                {
-                    tile.Spawn(_card);
-                    SendToGraveyard();
-                    CardManagerUI.Instance.SetDraggingCard(null);
-                }
-
+                /// TODO: Subscibe all of there methods to the OnCardActivation event.
+                tile.Spawn(_card);
+                OnCardActivation?.Invoke(_card);
+                CardManagerUI.Instance.SetDraggingCard(null);
+                _gameManager.Send
             }
         }
         else

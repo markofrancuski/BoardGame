@@ -28,12 +28,17 @@ public class CardManagerUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     {
         DeckManager.InitializeDrawnCards += InitializeNewCardsInHand;
         CardUI.OnCardInHandClicked += SetDraggingCard;
+
+        CardUI.OnCardActivation += (null) => { SetDraggingCard(null); };
+
         Tile.BoardPieceSpawned += DragginCardSpawned;
+
     }
     private void OnDestroy()
     {
         DeckManager.InitializeDrawnCards -= InitializeNewCardsInHand;
         CardUI.OnCardInHandClicked -= SetDraggingCard;
+        CardUI.OnCardActivation -= (null) => { SetDraggingCard(null); };
         Tile.BoardPieceSpawned -= DragginCardSpawned;
     }
     #endregion Unity Methods
