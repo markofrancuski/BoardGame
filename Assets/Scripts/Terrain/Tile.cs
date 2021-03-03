@@ -1,5 +1,6 @@
 ﻿using Enums.Card;
 using Enums.Tile;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
@@ -10,6 +11,8 @@ public class Tile : MonoBehaviour, IEndDragHandler
     #region Event Declaration
 
     public static UnityAction BoardPieceSpawned;
+
+    public static UnityAction<CardBaseScriptable> BoardPieceClicked;
 
     #endregion Event Declaration
 
@@ -29,6 +32,7 @@ public class Tile : MonoBehaviour, IEndDragHandler
     private BoardPiece _piece;
     public BoardPiece Piece => _piece;
 
+    private CardBaseScriptable _pawnCard;
     #endregion Component References
 
     #region Enums
@@ -84,30 +88,6 @@ public class Tile : MonoBehaviour, IEndDragHandler
 
         OnTileClicked();
     }
-    private void OnMouseUp()
-    {
-        /*Debug.Log("OnMouseUp");
-        if (_isDraggingCard)
-        {
-            Debug.Log("OnMouseUp");
-            // Card had been spawned
-            HandleDragginCard(null, 0);
-            BoardPieceSpawned?.Invoke();
-        }*/
-    }
-    private void OnMouseOver()
-    {
-        /*if (!_shouldCheckInput) return;
-
-        if (!_isDraggingCard) return;
-        {
-
-        }
-        */
-        
-        
-       // Debug.Log($"Mouse Over Tile with position:{transform.position}");
-    }
     #endregion Unity Methods
 
     #region Public Methods
@@ -119,6 +99,7 @@ public class Tile : MonoBehaviour, IEndDragHandler
             CardPawnScriptable cardPawn = card as CardPawnScriptable;
             GameObject pawnObject = Instantiate(cardPawn.PawnModel, gameObject.transform.localPosition, Quaternion.identity);
             _piece = pawnObject.GetComponent<BoardPiece>();
+            _pawnCard = card;
         }
 
         switch (card.CardType)
@@ -142,6 +123,7 @@ public class Tile : MonoBehaviour, IEndDragHandler
     public void RemovePiece()
     {
         _piece = null;
+        _pawnCard = null;
     }
 
     #endregion Public Methods
@@ -151,11 +133,24 @@ public class Tile : MonoBehaviour, IEndDragHandler
     {
         Debug.Log($"Clicked on Tile with position:{transform.position}");
 
+        if (_pawnCard)
+        {
+            HighlightTile(_greenMaterial);
+            BoardPieceClicked?.Invoke(_pawnCard);
+        }
+
+        //Show Action UI
+
         /// TODO: Perform checks if we are draging card 
         /// if not 
         /// or if its empty 
         /// or if we can to move some pawn onto this tile 
         /// or we want to select board piece
+    }
+    
+    protected virtual void HighlightTile(Material material)
+    {
+        _renderer.material = material;
     }
     #endregion Protected Methods
 
@@ -165,7 +160,7 @@ public class Tile : MonoBehaviour, IEndDragHandler
         if (!draggingCard)
         {
             _isDraggingCard = false;
-            _renderer.material = _tileMaterial;
+            HighlightTile(_tileMaterial);
             return;
         }
 
@@ -176,13 +171,13 @@ public class Tile : MonoBehaviour, IEndDragHandler
         {
             if (IsOccupied)
             {
-                _renderer.material = _redMaterial;
+                HighlightTile(_redMaterial);
             }
             else
             {
                 if (IsSpawningTile)
                 {
-                    _renderer.material = _greenMaterial;
+                    HighlightTile(_greenMaterial);
                 }
             }
 
