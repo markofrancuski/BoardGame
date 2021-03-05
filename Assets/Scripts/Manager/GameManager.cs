@@ -1,14 +1,10 @@
 ﻿using Enums.Game;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class GameManager : MonoBehaviour
+public class GameManager : Singleton<GameManager>
 {
-    #region Singleton
-    public static GameManager Instance;
-    #endregion
 
     #region Event declaration
     public static UnityAction<GamePhase> OnGamePhaseChanged;
@@ -49,29 +45,14 @@ public class GameManager : MonoBehaviour
     #endregion Component References
 
     #region Unity Methods
-    private void Awake()
+    private void Start()
     {
-        if(Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Debug.Log($"Instance of a {this.GetType()} Already exists. Destroying");
-            Destroy(this);
-        }
-
         DeckManager = DeckManager.Instance;
-        if(DeckManager == null)
+        if (DeckManager == null)
         {
             Debug.LogError($"Tried to get DeckManager Instance, but its NULL, will cause issues!");
         }
 
-    }
-
-    private void Start()
-    {
         Invoke("TestDrawCards", 1f);
     }
 

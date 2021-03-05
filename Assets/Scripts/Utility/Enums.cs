@@ -19,6 +19,14 @@
             DECK_SHUFFLE,
             INITIAL_SPAWNING,
         }
+
+
+        public enum PawnAction
+        {
+            MOVE,
+            ATTACK,
+            SPELL,
+        }
     }
 
     namespace Tile

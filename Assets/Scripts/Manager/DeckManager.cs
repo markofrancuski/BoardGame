@@ -1,18 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class DeckManager : MonoBehaviour
+public class DeckManager : Singleton<DeckManager>
 {
-
-    #region Singleton
-    /// TODO: Comment this in order to be able to test with editor script.
-    public static DeckManager Instance;
-
-    #endregion Singleton
 
     #region Events
     public static UnityAction OnCardsInDeckCountChanged;
@@ -62,22 +55,11 @@ public class DeckManager : MonoBehaviour
 
     #region Unity Methods
 
-    public void Awake()
+    private void Start()
     {
-        if(Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Debug.Log($"Instance of a {this.GetType()} Already exists. Destroying");
-            Destroy(this);
-        }
-
         GameManager.OnInitializeGame += InitializeGame;
         DeckScriptable[] decks = Resources.FindObjectsOfTypeAll<DeckScriptable>();
-        if(decks.Length > MaxDecks)
+        if (decks.Length > MaxDecks)
         {
             Debug.LogError($"You have exceeded the number of max decks you can have!");
         }
