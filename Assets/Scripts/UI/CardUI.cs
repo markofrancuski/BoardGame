@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using Helpers.StringHelpers;
 
 public class CardUI : MonoBehaviour, IDraggable
 {
