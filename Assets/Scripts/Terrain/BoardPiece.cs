@@ -5,15 +5,20 @@ using UnityEngine;
 public class BoardPiece : MonoBehaviour
 {
 
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] private GameObject _canvas;
+
+    public void ShowCanvasWithActions()
     {
-        
+        ActivateCanvas(true);
     }
 
-    // Update is called once per frame
-    void Update()
+    private void SetUpBoardPieceActions(CardPawnScriptable card)
     {
-        
+
+    }
+
+    public void ActivateCanvas(bool activate)
+    {
+        _canvas.SetActive(activate);
     }
 }

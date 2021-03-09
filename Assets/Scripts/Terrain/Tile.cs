@@ -32,7 +32,7 @@ public class Tile : MonoBehaviour, IEndDragHandler
     private BoardPiece _piece;
     public BoardPiece Piece => _piece;
 
-    private CardBaseScriptable _pawnCard;
+    [SerializeField] private CardBaseScriptable _pawnCard;
     #endregion Component References
 
     #region Enums
@@ -98,6 +98,7 @@ public class Tile : MonoBehaviour, IEndDragHandler
         {
             CardPawnScriptable cardPawn = card as CardPawnScriptable;
             GameObject pawnObject = Instantiate(cardPawn.PawnModel, gameObject.transform.localPosition, Quaternion.identity);
+            pawnObject.transform.SetParent(transform);
             _piece = pawnObject.GetComponent<BoardPiece>();
             _pawnCard = card;
         }

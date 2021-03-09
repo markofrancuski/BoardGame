@@ -404,7 +404,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 272073548}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 339794225}
+        m_TargetAssemblyTypeName: MainMenuUIHandler, Assembly-CSharp
+        m_MethodName: ExitGame
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &272073548
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -557,9 +569,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad1ec98ebb91f0b4682f3413bdd7f773, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _mainMenuCanvas: {fileID: 431453701}
   _playGameCanvas: {fileID: 0}
-  _deckCustomizationCanvas: {fileID: 0}
-  _settingsCanvas: {fileID: 0}
+  _deckCustomizationCanvas: {fileID: 1221751048}
+  _settingsCanvas: {fileID: 947639274}
 --- !u!1 &431453701
 GameObject:
   m_ObjectHideFlags: 0
@@ -717,7 +730,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 479531225}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 339794225}
+        m_TargetAssemblyTypeName: MainMenuUIHandler, Assembly-CSharp
+        m_MethodName: Settings
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &479531225
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1426,7 +1451,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1419669079}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 339794225}
+        m_TargetAssemblyTypeName: MainMenuUIHandler, Assembly-CSharp
+        m_MethodName: PlayGame
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1419669079
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1948,7 +1985,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1801264525}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 339794225}
+        m_TargetAssemblyTypeName: MainMenuUIHandler, Assembly-CSharp
+        m_MethodName: DeckCustomization
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1801264525
 MonoBehaviour:
   m_ObjectHideFlags: 0

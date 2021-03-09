@@ -14,8 +14,13 @@ public class MainMenuUIHandler : MonoBehaviour
         /// TODO: Should be another panel to choose game mode or it load new level
         if(!_playGameCanvas)
         {
-            PrintError("Play Game");
+
+            /// TODO: Delete this after
+            SceneLoader.Instance.LoadScene(SceneLoader.GameSceneIndex);
+
+            //PrintError("Play Game");
             return;
+            
         }
 
         // Show/Hide Play Game Canvas
@@ -66,5 +71,3 @@ public class MainMenuUIHandler : MonoBehaviour
     }
     #endregion Private Methods
 }
-printf("luka ne znam sta radim :(");
-return 0; //poz svoje//
