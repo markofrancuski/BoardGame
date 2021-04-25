@@ -29,13 +29,4 @@
         }
     }
 
-    namespace Tile
-    {
-        public enum TileState
-        {
-            NO_INPUT,
-            DRAGGING_CARD,
-            ACTION,
-        }
-    }
 }

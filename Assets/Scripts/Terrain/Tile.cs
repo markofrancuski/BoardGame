@@ -1,5 +1,4 @@
 ﻿using Enums.Card;
-using Enums.Tile;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
@@ -11,8 +10,6 @@ public class Tile : MonoBehaviour, IEndDragHandler
     #region Event Declaration
 
     public static UnityAction BoardPieceSpawned;
-
-    public static UnityAction<CardBaseScriptable> BoardPieceClicked;
 
     #endregion Event Declaration
 
@@ -27,22 +24,8 @@ public class Tile : MonoBehaviour, IEndDragHandler
     #endregion UI References
 
     #region Component References
-
-    [SerializeField]
-    private BoardPiece _piece;
-    public BoardPiece Piece => _piece;
-
-    [SerializeField] private CardBaseScriptable _pawnCard;
+    [SerializeField] private BoardPiece _piece;
     #endregion Component References
-
-    #region Enums
-    [SerializeField] private TileState _tileState;
-    public TileState TileState
-    {
-        get { return _tileState; }
-        protected set { _tileState = value; }
-    }
-    #endregion Enums
 
     #region Private Fields
     private Vector2 _tilePosition;
@@ -82,7 +65,6 @@ public class Tile : MonoBehaviour, IEndDragHandler
     }
     private void OnMouseDown()
     {
-        //Debug.Log("OnMouseDown");
 
         if (!_shouldCheckInput) return;
 
@@ -99,8 +81,7 @@ public class Tile : MonoBehaviour, IEndDragHandler
             CardPawnScriptable cardPawn = card as CardPawnScriptable;
             GameObject pawnObject = Instantiate(cardPawn.PawnModel, gameObject.transform.localPosition, Quaternion.identity);
             pawnObject.transform.SetParent(transform);
-            _piece = pawnObject.GetComponent<BoardPiece>();
-            _pawnCard = card;
+            SetPiece(pawnObject.GetComponent<BoardPiece>());
         }
 
         switch (card.CardType)
@@ -124,7 +105,6 @@ public class Tile : MonoBehaviour, IEndDragHandler
     public void RemovePiece()
     {
         _piece = null;
-        _pawnCard = null;
     }
 
     #endregion Public Methods
@@ -134,13 +114,15 @@ public class Tile : MonoBehaviour, IEndDragHandler
     {
         Debug.Log($"Clicked on Tile with position:{transform.position}");
 
-        if (_pawnCard)
+        if (_piece)
         {
             HighlightTile(_greenMaterial);
-            BoardPieceClicked?.Invoke(_pawnCard);
+            UIManager.Instance.ShowCardActionUI(_piece);
+            return;
         }
 
-        //Show Action UI
+
+       //Show Action UI
 
         /// TODO: Perform checks if we are draging card 
         /// if not 
